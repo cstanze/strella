@@ -47,7 +47,7 @@ extern "C" CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, in
 	[self setupColors];
 	[self setupTime];
 	[self setupDate];
-	[self setupEvents];
+	// [self setupEvents];
 	[[NSNotificationCenter defaultCenter] addObserver:self
         selector:@selector(reloadEvents) 
         name:EKEventStoreChangedNotification
@@ -55,6 +55,7 @@ extern "C" CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, in
 }
 
 -(void)didMoveToWindow {
+	%orig;
 	[self setupColors];
 }
 
@@ -76,11 +77,8 @@ extern "C" CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, in
 %new
 -(void)setupDate {
 	SBFLockScreenDateSubtitleDateView *sdv = [self valueForKey:@"_dateSubtitleView"];
-	// 95.46875
+	sdv.tag = 7285;
 	// 4.46875
-	// sdv._internalConstraints[2].constant = ((SBUILegibilityLabel*)[self viewWithTag:7284]).font.lineHeight / 2 + 4.46875;
-	[sdv setNeedsLayout];
-	[sdv layoutIfNeeded];
 	SBUILegibilityLabel *dateLabel = sdv.subviews[0];
 	dateLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightSemibold];
 	[dateLabel.legibilitySettings setPrimaryColor:dateColor];
@@ -173,6 +171,7 @@ extern "C" CFArrayRef CPBitmapCreateImagesFromData(CFDataRef cpbitmap, void*, in
 	[eventsContainer.leadingAnchor constraintEqualToAnchor:upNextContainer.leadingAnchor constant:0].active = YES;
 	[eventsContainer.trailingAnchor constraintEqualToAnchor:upNextContainer.trailingAnchor constant:0].active = YES;
 	[upNextContainer.topAnchor constraintEqualToAnchor:((UIView*)[self valueForKey:@"_dateSubtitleView"]).bottomAnchor constant:upNextContainer.frame.size.height].active = YES;
+	[[self viewWithTag:7284].bottomAnchor constraintEqualToAnchor:upNextContainer.topAnchor constant:0].active = YES;
 }
 
 %new
